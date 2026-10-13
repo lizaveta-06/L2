@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S . -B build
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Run program
+        shell: bash
+        run: |
+          if [ -f build/ip_filter ]; then
+            ./build/ip_filter < ip_filter.tsv > result.txt
+          else
+            ./build/Release/ip_filter.exe < ip_filter.tsv > result.txt
+          fi
+          echo "Lines in result.txt:"
+          wc -l result.txt
