@@ -4,7 +4,6 @@
 #include <tuple>
 #include <type_traits>
 
-// Вспомогательные утилиты (были лямбдами в main — теперь static-функции)
 static int to_int(const std::string& s)
 {
     return std::stoi(s);
@@ -41,9 +40,6 @@ std::vector<std::string> split(const std::string& str, char d)
 
 void sort_ips(std::vector<std::vector<std::string>>& ip_pool)
 {
-    // Тип одного IP = std::vector<std::string>.
-    // ip_pool — это ссылка (&), поэтому сначала убираем ссылку через remove_reference,
-    // затем берём value_type вектора. Это и есть корректное применение decltype.
     using Ip = std::remove_reference<decltype(ip_pool)>::type::value_type;
 
     std::sort(ip_pool.begin(), ip_pool.end(),
@@ -54,7 +50,7 @@ void sort_ips(std::vector<std::vector<std::string>>& ip_pool)
                       const int ai = to_int(a[i]);
                       const int bi = to_int(b[i]);
                       if (ai != bi)
-                          return ai > bi; // обратный порядок
+                          return ai > bi; 
                   }
                   return false;
               });
@@ -75,7 +71,7 @@ std::vector<std::vector<std::string>> filter_by_first_byte(
 std::vector<std::vector<std::string>> filter_by_first_two_bytes(
     const std::vector<std::vector<std::string>>& pool, int b1, int b2)
 {
-    // Эталонная пара — через tuple (требование методички).
+    // кортеж эталлон
     const auto prefix = std::make_tuple(b1, b2);
     std::vector<std::vector<std::string>> result;
 

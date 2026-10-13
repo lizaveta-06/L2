@@ -16,11 +16,9 @@ int main(int, char const*[])
             ip_pool.push_back(split(v.at(0), '.'));
         }
 
-        // 1. Обратная лексикографическая сортировка
+        // обратная лексикографическая сортировка
         sort_ips(ip_pool);
 
-        // Лямбда для печати одного IP — используется 4 раза.
-        // Это ровно то, что было у вас внутри циклов в старом коде.
         auto print_ip = [](const std::vector<std::string>& ip)
         {
             for (std::size_t i = 0; i < ip.size(); ++i)
@@ -32,19 +30,15 @@ int main(int, char const*[])
             std::cout << std::endl;
         };
 
-        // 2. Полный список
         for (const auto& ip : ip_pool)
             print_ip(ip);
 
-        // 3. Первый байт == 1
         for (const auto& ip : filter_by_first_byte(ip_pool, 1))
             print_ip(ip);
 
-        // 4. Первые два байта == 46, 70
         for (const auto& ip : filter_by_first_two_bytes(ip_pool, 46, 70))
             print_ip(ip);
 
-        // 5. Любой байт == 46
         for (const auto& ip : filter_by_any_byte(ip_pool, 46))
             print_ip(ip);
     }
