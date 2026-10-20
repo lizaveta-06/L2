@@ -56,7 +56,7 @@ void sort_ips(std::vector<std::vector<std::string>>& ip_pool)
               });
 }
 
-std::vector<std::vector<std::string>> filter_by_first_byte(
+std::vector<std::vector<std::string>> filter_1(
     const std::vector<std::vector<std::string>>& pool, int value)
 {
     std::vector<std::vector<std::string>> result;
@@ -68,7 +68,7 @@ std::vector<std::vector<std::string>> filter_by_first_byte(
     return result;
 }
 
-std::vector<std::vector<std::string>> filter_by_first_two_bytes(
+std::vector<std::vector<std::string>> filter_2(
     const std::vector<std::vector<std::string>>& pool, int b1, int b2)
 {
     // кортеж эталлон
@@ -84,7 +84,7 @@ std::vector<std::vector<std::string>> filter_by_first_two_bytes(
     return result;
 }
 
-std::vector<std::vector<std::string>> filter_by_any_byte(
+std::vector<std::vector<std::string>> filter_3(
     const std::vector<std::vector<std::string>>& pool, int value)
 {
     std::vector<std::vector<std::string>> result;

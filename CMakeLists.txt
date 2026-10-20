@@ -4,15 +4,12 @@ project(ip_filter CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# --- Библиотека с логикой ---
 add_library(ip_filter_lib ip_filter.cpp)
 target_include_directories(ip_filter_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-# --- Основная программа ---
 add_executable(ip_filter main.cpp)
 target_link_libraries(ip_filter PRIVATE ip_filter_lib)
 
-# --- Тесты ---
 enable_testing()
 
 include(FetchContent)

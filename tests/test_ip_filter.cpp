@@ -38,6 +38,6 @@ TEST(FilterTest, AnyByteEquals46)
         {"46", "70", "225", "39"},
     };
 
-    auto r = filter_by_any_byte(pool, 46);
+    auto r = filter_3(pool, 46);
     ASSERT_EQ(r.size(), 3u);
 }

@@ -33,13 +33,13 @@ int main(int, char const*[])
         for (const auto& ip : ip_pool)
             print_ip(ip);
 
-        for (const auto& ip : filter_by_first_byte(ip_pool, 1))
+        for (const auto& ip : filter_1(ip_pool, 1))
             print_ip(ip);
 
-        for (const auto& ip : filter_by_first_two_bytes(ip_pool, 46, 70))
+        for (const auto& ip : filter_2(ip_pool, 46, 70))
             print_ip(ip);
 
-        for (const auto& ip : filter_by_any_byte(ip_pool, 46))
+        for (const auto& ip : filter_3(ip_pool, 46))
             print_ip(ip);
     }
     catch (const std::exception& e)
