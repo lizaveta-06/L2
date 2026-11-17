@@ -2,21 +2,11 @@
 
 #include <algorithm>
 #include <tuple>
-#include <type_traits>
+#include <iterator>
 
 static int to_int(const std::string& s)
 {
     return std::stoi(s);
-}
-
-static bool has_byte(const std::vector<std::string>& ip, int value)
-{
-    for (std::size_t i = 0; i < ip.size(); ++i)
-    {
-        if (to_int(ip[i]) == value)
-            return true;
-    }
-    return false;
 }
 
 std::vector<std::string> split(const std::string& str, char d)
@@ -38,12 +28,11 @@ std::vector<std::string> split(const std::string& str, char d)
     return r;
 }
 
-void sort_ips(std::vector<std::vector<std::string>>& ip_pool)
+void sort_ips(std::vector<IpParts>& ip_pool)
 {
-    using Ip = std::remove_reference<decltype(ip_pool)>::type::value_type;
-
+    
     std::sort(ip_pool.begin(), ip_pool.end(),
-              [](const Ip& a, const Ip& b)
+              [](const IpParts& a, const IpParts& b)
               {
                   for (std::size_t i = 0; i < 4; ++i)
                   {
@@ -56,42 +45,37 @@ void sort_ips(std::vector<std::vector<std::string>>& ip_pool)
               });
 }
 
-std::vector<std::vector<std::string>> filter_1(
-    const std::vector<std::vector<std::string>>& pool, int value)
+std::vector<IpParts> filter_1(const std::vector<IpParts>& pool)
 {
-    std::vector<std::vector<std::string>> result;
-    for (const auto& ip : pool)
-    {
-        if (to_int(ip[0]) == value)
-            result.push_back(ip);
-    }
+    std::vector<IpParts> result;
+    std::copy_if(pool.begin(), pool.end(), std::back_inserter(result),
+                 [](const IpParts& ip) { return to_int(ip[0]) == 1; });
     return result;
 }
 
-std::vector<std::vector<std::string>> filter_2(
-    const std::vector<std::vector<std::string>>& pool, int b1, int b2)
+std::vector<IpParts> filter_2(const std::vector<IpParts>& pool)
 {
     // кортеж эталлон
-    const auto prefix = std::make_tuple(b1, b2);
-    std::vector<std::vector<std::string>> result;
+    const auto prefix = std::make_tuple(46, 70);
+    std::vector<IpParts> result;
 
-    for (const auto& ip : pool)
-    {
-        const auto first_two = std::make_tuple(to_int(ip[0]), to_int(ip[1]));
-        if (first_two == prefix)
-            result.push_back(ip);
-    }
+    std::copy_if(pool.begin(), pool.end(), std::back_inserter(result),
+                 [&prefix](const IpParts& ip)
+                 {
+                     return std::make_tuple(to_int(ip[0]), to_int(ip[1])) == prefix;
+                 });
     return result;
 }
 
-std::vector<std::vector<std::string>> filter_3(
-    const std::vector<std::vector<std::string>>& pool, int value)
+std::vector<IpParts> filter_3(const std::vector<IpParts>& pool)
 {
-    std::vector<std::vector<std::string>> result;
-    for (const auto& ip : pool)
-    {
-        if (has_byte(ip, value))
-            result.push_back(ip);
-    }
+    std::vector<IpParts> result;
+    std::copy_if(pool.begin(), pool.end(), std::back_inserter(result),
+                 [](const IpParts& ip)
+                 {
+                     return std::any_of(ip.begin(), ip.end(),
+                                        [](const std::string& s)
+                                        { return to_int(s) == 46; });
+                 });
     return result;
 }

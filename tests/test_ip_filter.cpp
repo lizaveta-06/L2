@@ -1,7 +1,8 @@
 #include "ip_filter.h"
 
 #include <gtest/gtest.h>
-// тест 1
+
+//тест 1
 TEST(SplitTest, BasicSplit)
 {
     auto r = split("11.22.33.44", '.');
@@ -12,32 +13,56 @@ TEST(SplitTest, BasicSplit)
     EXPECT_EQ(r[3], "44");
 }
 
-// тест 2
+//тест 2
 TEST(SortTest, ReverseLexicographicByBytes)
 {
-    std::vector<std::vector<std::string>> pool = {
+    std::vector<IpParts> pool = {
         {"1", "1", "1", "1"},
         {"1", "10", "1", "1"},
         {"1", "2", "1", "1"},
     };
-
     sort_ips(pool);
-
     EXPECT_EQ(pool[0][1], "10");
     EXPECT_EQ(pool[1][1], "2");
     EXPECT_EQ(pool[2][1], "1");
 }
 
-// тест 3
+//тест 3
+TEST(FilterTest, FirstByteEquals1)
+{
+    std::vector<IpParts> pool = {
+        {"1", "2", "3", "4"},
+        {"46", "70", "1", "1"},
+        {"1", "10", "1", "1"},
+    };
+    auto r = filter_1(pool);
+    ASSERT_EQ(r.size(), 2u);
+}
+
+// тест 4
+TEST(FilterTest, FirstTwoBytes46And70)
+{
+    std::vector<IpParts> pool = {
+        {"46", "70", "1", "1"},
+        {"46", "71", "1", "1"},
+        {"1", "70", "1", "1"},
+    };
+    auto r = filter_2(pool);
+    ASSERT_EQ(r.size(), 1u);
+    EXPECT_EQ(r[0][0], "46");
+    EXPECT_EQ(r[0][1], "70");
+}
+
+
+// тест 5
 TEST(FilterTest, AnyByteEquals46)
 {
-    std::vector<std::vector<std::string>> pool = {
-        {"186", "204", "34", "46"}, 
-        {"186", "46", "222", "194"}, 
-        {"1", "1", "1", "1"},  
+    std::vector<IpParts> pool = {
+        {"186", "204", "34", "46"},
+        {"186", "46", "222", "194"},
+        {"1", "1", "1", "1"},
         {"46", "70", "225", "39"},
     };
-
-    auto r = filter_3(pool, 46);
+    auto r = filter_3(pool);
     ASSERT_EQ(r.size(), 3u);
 }
